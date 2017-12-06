@@ -13,15 +13,6 @@
       <descriptionTemplate></descriptionTemplate>
     </jenkins.plugins.maveninfo.config.MavenInfoJobConfig>
     <com.synopsys.arc.jenkinsci.plugins.jobrestrictions.jobs.JobRestrictionProperty plugin="job-restrictions@0.6"/>
-    <hudson.model.ParametersDefinitionProperty>
-      <parameterDefinitions>
-        <hudson.model.StringParameterDefinition>
-          <name>TAG</name>
-          <description>Enter Docker Image Tag</description>
-          <defaultValue>v1</defaultValue>
-        </hudson.model.StringParameterDefinition>
-      </parameterDefinitions>
-    </hudson.model.ParametersDefinitionProperty>
   </properties>
   <scm class="hudson.plugins.git.GitSCM" plugin="git@3.6.4">
     <configVersion>2</configVersion>
@@ -45,6 +36,9 @@
   <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
   <triggers>
+    <com.cloudbees.jenkins.GitHubPushTrigger plugin="github@1.28.1">
+      <spec></spec>
+    </com.cloudbees.jenkins.GitHubPushTrigger>
     <hudson.triggers.SCMTrigger>
       <spec></spec>
       <ignorePostCommitHooks>false</ignorePostCommitHooks>
@@ -89,6 +83,7 @@
       <command>cd /var/lib/jenkins/workspace/Demo-Pipeline/docker
 cp $WORKSPACE/target/hello-world-war-2.0.0.war .
 mv hello-world-war-2.0.0.war demo.war
+TAG=`ls -ltr hello-world-war-2.0.0.war|cut -c65-69`
 echo $TAG &gt;/var/lib/jenkins/workspace/Demo-Pipeline/docker/version.txt
 docker build -t manpreet1989/tomcat:$TAG .</command>
     </hudson.tasks.Shell>
