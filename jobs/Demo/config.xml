@@ -83,7 +83,7 @@
       <command>cd /var/lib/jenkins/workspace/Demo-Pipeline/docker
 cp $WORKSPACE/target/hello-world-war-2.0.0.war .
 mv hello-world-war-2.0.0.war demo.war
-TAG=`ls -ltr hello-world-war-2.0.0.war|cut -c65-69`
+TAG=`ls -ltr /var/lib/jenkins/workspace/Demo/target/hello-world-war-2.0.0.war|cut -c65-69`
 echo $TAG &gt;/var/lib/jenkins/workspace/Demo-Pipeline/docker/version.txt
 docker build -t manpreet1989/tomcat:$TAG .</command>
     </hudson.tasks.Shell>
