@@ -1,0 +1,93 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<hudson>
+  <disabledAdministrativeMonitors/>
+  <version>2.73.3</version>
+  <numExecutors>2</numExecutors>
+  <mode>NORMAL</mode>
+  <useSecurity>true</useSecurity>
+  <authorizationStrategy class="hudson.security.FullControlOnceLoggedInAuthorizationStrategy">
+    <denyAnonymousReadAccess>true</denyAnonymousReadAccess>
+  </authorizationStrategy>
+  <securityRealm class="hudson.security.HudsonPrivateSecurityRealm">
+    <disableSignup>true</disableSignup>
+    <enableCaptcha>false</enableCaptcha>
+  </securityRealm>
+  <disableRememberMe>false</disableRememberMe>
+  <projectNamingStrategy class="jenkins.model.ProjectNamingStrategy$DefaultProjectNamingStrategy"/>
+  <workspaceDir>${JENKINS_HOME}/workspace/${ITEM_FULLNAME}</workspaceDir>
+  <buildsDir>${ITEM_ROOTDIR}/builds</buildsDir>
+  <jdks>
+    <jdk>
+      <name>java1.8.0_121</name>
+      <home>/usr/local/jdk1.8.0_152</home>
+      <properties/>
+    </jdk>
+  </jdks>
+  <viewsTabBar class="hudson.views.DefaultViewsTabBar"/>
+  <myViewsTabBar class="hudson.views.DefaultMyViewsTabBar"/>
+  <clouds>
+    <hudson.plugins.ec2.EC2Cloud plugin="ec2@1.37">
+      <name>ec2-DynamicSlaves</name>
+      <useInstanceProfileForCredentials>false</useInstanceProfileForCredentials>
+      <credentialsId>3110a954-e1e2-429c-b56e-0daaca5fc60b</credentialsId>
+      <privateKey>
+        <privateKey>{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}</privateKey>
+      </privateKey>
+      <instanceCap>2147483647</instanceCap>
+      <templates>
+        <hudson.plugins.ec2.SlaveTemplate>
+          <ami>ami-ba7117c0</ami>
+          <description>Slave </description>
+          <zone></zone>
+          <securityGroups>Manpreet-test</securityGroups>
+          <remoteFS></remoteFS>
+          <type>T1Micro</type>
+          <ebsOptimized>false</ebsOptimized>
+          <labels>Manpreet-test</labels>
+          <mode>NORMAL</mode>
+          <initScript></initScript>
+          <tmpDir></tmpDir>
+          <userData></userData>
+          <numExecutors>1</numExecutors>
+          <remoteAdmin></remoteAdmin>
+          <jvmopts></jvmopts>
+          <subnetId></subnetId>
+          <idleTerminationMinutes>15</idleTerminationMinutes>
+          <iamInstanceProfile></iamInstanceProfile>
+          <deleteRootOnTermination>false</deleteRootOnTermination>
+          <useEphemeralDevices>false</useEphemeralDevices>
+          <customDeviceMapping></customDeviceMapping>
+          <instanceCap>2147483647</instanceCap>
+          <stopOnTerminate>false</stopOnTerminate>
+          <usePrivateDnsName>false</usePrivateDnsName>
+          <associatePublicIp>false</associatePublicIp>
+          <useDedicatedTenancy>false</useDedicatedTenancy>
+          <launchTimeout>2147483647</launchTimeout>
+          <connectBySSHProcess>false</connectBySSHProcess>
+          <connectUsingPublicIp>false</connectUsingPublicIp>
+          <node>true</node>
+        </hudson.plugins.ec2.SlaveTemplate>
+      </templates>
+      <region>us-east-1</region>
+    </hudson.plugins.ec2.EC2Cloud>
+  </clouds>
+  <quietPeriod>5</quietPeriod>
+  <scmCheckoutRetryCount>0</scmCheckoutRetryCount>
+  <views>
+    <hudson.model.AllView>
+      <owner class="hudson" reference="../../.."/>
+      <name>all</name>
+      <filterExecutors>false</filterExecutors>
+      <filterQueue>false</filterQueue>
+      <properties class="hudson.model.View$PropertyList"/>
+    </hudson.model.AllView>
+  </views>
+  <primaryView>all</primaryView>
+  <slaveAgentPort>-1</slaveAgentPort>
+  <label></label>
+  <crumbIssuer class="hudson.security.csrf.DefaultCrumbIssuer">
+    <excludeClientIPFromCrumb>false</excludeClientIPFromCrumb>
+  </crumbIssuer>
+  <nodeProperties/>
+  <globalNodeProperties/>
+</hudson>

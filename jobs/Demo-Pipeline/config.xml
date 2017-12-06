@@ -1,0 +1,133 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.15">
+  <actions>
+    <io.jenkins.blueocean.service.embedded.BlueOceanUrlAction plugin="blueocean-rest-impl@1.3.3">
+      <blueOceanUrlObject class="io.jenkins.blueocean.service.embedded.BlueOceanUrlObjectImpl">
+        <mappedUrl>blue/organizations/jenkins/Demo-Pipeline</mappedUrl>
+        <modelObject class="flow-definition" reference="../../../.."/>
+      </blueOceanUrlObject>
+    </io.jenkins.blueocean.service.embedded.BlueOceanUrlAction>
+    <org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction plugin="workflow-multibranch@2.16">
+      <jobPropertyDescriptors>
+        <string>org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty</string>
+        <string>jenkins.model.BuildDiscarderProperty</string>
+      </jobPropertyDescriptors>
+    </org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>TAG</name>
+          <description>Please choose version for tomcat docker image creation; default value is v1</description>
+          <defaultValue>v1</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.41">
+    <script>#!groovy
+/*********************************************************************
+***** Description :: This template is used to setup sample pipeline *****
+***** Revision    :: 1.0                                         *****
+**********************************************************************/  
+import hudson.model.*
+import hudson.EnvVars
+import groovy.json.JsonSlurperClassic
+import groovy.json.JsonBuilder
+import groovy.json.JsonOutput
+import java.net.URL
+
+
+node {
+   def GIT_URL = &apos;https://github.com/manpreetsingh6/Demo.git&apos;
+   def GIT_BRANCH = &apos;master&apos;
+   def SONAR_BRANCH = &apos;master&apos;
+   def MAVEN_GOALS = &apos;clean install -X&apos;
+   def MAVEN_HOME = tool &apos;M2_HOME&apos;
+   def JAVA_HOME = tool &apos;java1.8.0_121&apos;
+   def SONAR_URL = &apos;http://sonar.demo.local:9000&apos;
+   def SONAR_LOGIN=&apos;admin&apos;
+   def SONAR_PASSWORD=&apos;admin&apos;
+   def artifactory_user=&apos;admin&apos;
+   def artifactory_password=&apos;admin&apos;
+   def dversion=&apos;$TAG&apos;
+
+   env.PATH = &quot;${JAVA_HOME}/bin:${MAVEN_HOME}/bin:${env.PATH}&quot;
+   properties([buildDiscarder(logRotator(artifactDaysToKeepStr: &apos;5&apos;, artifactNumToKeepStr: &apos;5&apos;, daysToKeepStr: &apos;5&apos;, numToKeepStr: &apos;5&apos;)), pipelineTriggers([])])
+   properties([parameters([string(defaultValue: &apos;v1&apos;, description: &apos;Please choose version for tomcat docker image creation; default value is v1&apos;, name: &apos;TAG&apos;)]), pipelineTriggers([])])
+   
+   /****************************************
+   *  Checkout code from GIT
+   *****************************************/
+   stage(&apos;\u2780 Checkout Code from GIT&apos;) 
+   {
+      
+        echo &quot;INFO =&gt; Checking out from URL: ${GIT_URL} and BRANCH: ${GIT_BRANCH}&quot;
+                   checkout([$class: &apos;GitSCM&apos;, branches: [[name: &quot;*/${GIT_BRANCH}&quot;]], doGenerateSubmoduleConfigurations: false, extensions: [[$class: &apos;CloneOption&apos;, noTags: false, reference: &apos;&apos;, shallow: true]], submoduleCfg: [], userRemoteConfigs: [[credentialsId: &apos;git-credentials&apos;, url: &quot;${GIT_URL}&quot;]]])
+                
+   }
+    /*******************************************
+   *  Build stage to trigger the maven build
+   ********************************************/
+   stage(&apos;\u2781 Compile and execute Unit test&apos;)
+   {
+      
+        def ARTIFACT_VERSION = getVersion()
+                   if (ARTIFACT_VERSION)
+                   {
+                     echo &quot;INFO =&gt; Building Version: ${ARTIFACT_VERSION}&quot;
+                   }
+                   echo &quot;INFO =&gt; MAVEN_HOME: ${MAVEN_HOME}&quot;
+                   echo &quot;INFO =&gt; JAVA_HOME : ${JAVA_HOME}&quot;
+                   sh &quot;mvn -B ${MAVEN_GOALS} -DskipTests&quot;
+                 
+   }
+   stage(&apos;\u2782 Sonar Analysis and coverage&apos;)
+   {
+      
+                   
+                                  echo &quot;INFO =&gt; Running Sonar Analysis&quot;
+                                             sh &quot;mvn -DBranch=${SONAR_BRANCH} -e -B sonar:sonar -Dsonar.host.url=${SONAR_URL} -Dsonar.login=${SONAR_LOGIN} -Dsonar.password=${SONAR_PASSWORD} -Dsonar.scm.disabled=true -X&quot;
+                    
+                 
+   }
+   stage(&apos;\u2783 Upload package on artifactory&apos;)
+   {
+     def ARTIFACT_VERSION = getVersion()
+     echo ARTIFACT_VERSION
+     String a = ARTIFACT_VERSION.replaceAll(&quot;-SNAPSHOT&quot;,&quot;&quot;)
+     
+    /*** sh &apos;b=`$ARTIFACT_VERSION| cut -f1 -d - `; echo $b&apos; ***/
+     echo &quot;INFO =&gt; Deploying package to artifactory&quot;
+     sh &quot;curl -u $artifactory_user:$artifactory_password -T $WORKSPACE/target/hello-world-war-${ARTIFACT_VERSION}.war http://artifactory.demo.local:8081/artifactory/example-repo-local/hello-world-war-${ARTIFACT_VERSION}.war&quot;
+                
+   }
+   stage(&apos;\u2784 Build Docker Image&apos;)
+   {
+       def ARTIFACT_VERSION = getVersion()
+     echo ARTIFACT_VERSION
+     String a = ARTIFACT_VERSION.replaceAll(&quot;-SNAPSHOT&quot;,&quot;&quot;)
+     
+     sh &apos;&apos;&apos;cd /var/lib/jenkins/workspace/Demo-Pipeline/docker
+cp $WORKSPACE/target/hello-world-war-2.0.0.war .
+mv hello-world-war-2.0.0.war demo.war
+docker build -t manpreet1989/tomcat:$TAG .&apos;&apos;&apos;
+   }
+ 
+}
+def getVersion()
+{
+   def matcher = readFile(&quot;pom.xml&quot;) =~ &apos;&lt;version&gt;(.+)&lt;/version&gt;&apos;
+   matcher ? matcher[0][1] : null
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>

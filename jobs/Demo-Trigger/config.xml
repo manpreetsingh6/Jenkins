@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<flow-definition plugin="workflow-job@2.15">
+  <actions>
+    <io.jenkins.blueocean.service.embedded.BlueOceanUrlAction plugin="blueocean-rest-impl@1.3.3">
+      <blueOceanUrlObject class="io.jenkins.blueocean.service.embedded.BlueOceanUrlObjectImpl">
+        <mappedUrl>blue/organizations/jenkins/Demo-Trigger</mappedUrl>
+        <modelObject class="flow-definition" reference="../../../.."/>
+      </blueOceanUrlObject>
+    </io.jenkins.blueocean.service.embedded.BlueOceanUrlAction>
+  </actions>
+  <description></description>
+  <keepDependencies>false</keepDependencies>
+  <properties>
+    <com.synopsys.arc.jenkinsci.plugins.jobrestrictions.jobs.JobRestrictionProperty plugin="job-restrictions@0.6"/>
+    <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+      <triggers/>
+    </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
+  </properties>
+  <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.41">
+    <script>node {
+    /****************************************
+   *  Checkout code from GIT
+   *****************************************/
+   stage(&apos;\u2780 Deploy Tomcat Container&apos;) 
+   {
+    
+sh &apos;&apos;&apos;id=`docker ps -a|grep manpreet1989|awk \&apos;{print$1}\&apos;`
+docker rm -f $id
+TAG=`cat /var/lib/jenkins/workspace/Demo-Pipeline/docker/version.txt`
+docker run -d -p 8888:8080 manpreet1989/tomcat:$TAG
+echo &quot;INFO =&gt; Please access Application from URL: http://54.86.178.119:8888/demo&quot;&apos;&apos;&apos;
+
+   }
+}</script>
+    <sandbox>true</sandbox>
+  </definition>
+  <triggers/>
+  <disabled>false</disabled>
+</flow-definition>
