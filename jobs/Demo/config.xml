@@ -27,7 +27,7 @@
     <configVersion>2</configVersion>
     <userRemoteConfigs>
       <hudson.plugins.git.UserRemoteConfig>
-        <url>https://github.com/manpreetsingh6/Demo.gita</url>
+        <url>https://github.com/manpreetsingh6/Demo.git</url>
         <credentialsId>d51afaa8-a3bf-4d3b-8395-f232b2964c25</credentialsId>
       </hudson.plugins.git.UserRemoteConfig>
     </userRemoteConfigs>
