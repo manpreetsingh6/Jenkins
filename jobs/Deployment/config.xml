@@ -22,7 +22,7 @@
         <hudson.model.StringParameterDefinition>
           <name>APP_VERSION</name>
           <description>Enter version of app you want to deploy</description>
-          <defaultValue>2.0</defaultValue>
+          <defaultValue>1.0</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
