@@ -23,7 +23,7 @@
         <hudson.model.StringParameterDefinition>
           <name>TAG</name>
           <description>Please choose version for tomcat docker image creation; default value is v1</description>
-          <defaultValue>v2</defaultValue>
+          <defaultValue>v1</defaultValue>
         </hudson.model.StringParameterDefinition>
       </parameterDefinitions>
     </hudson.model.ParametersDefinitionProperty>
