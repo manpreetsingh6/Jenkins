@@ -40,7 +40,7 @@
     
 
  sh &apos;docker run -d -p $TOMCAT_PORT:8080 manpreet1989/tomcat:$APP_VERSION&apos; 
- echo &quot;INFO =&gt; Please access Application from URL: http://54.86.178.119:$TOMCAT_PORT/demo&quot;    
+ echo &quot;INFO =&gt; Please access Application from URL: http://http://34.205.159.82:$TOMCAT_PORT/demo&quot;    
    }
 }</script>
     <sandbox>true</sandbox>
