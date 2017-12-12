@@ -9,8 +9,8 @@
     </io.jenkins.blueocean.service.embedded.BlueOceanUrlAction>
     <org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction plugin="workflow-multibranch@2.16">
       <jobPropertyDescriptors>
-        <string>hudson.model.ParametersDefinitionProperty</string>
         <string>org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty</string>
+        <string>jenkins.model.BuildDiscarderProperty</string>
       </jobPropertyDescriptors>
     </org.jenkinsci.plugins.workflow.multibranch.JobPropertyTrackerAction>
   </actions>
@@ -18,14 +18,15 @@
   <keepDependencies>false</keepDependencies>
   <properties>
     <com.synopsys.arc.jenkinsci.plugins.jobrestrictions.jobs.JobRestrictionProperty plugin="job-restrictions@0.6"/>
-    <jenkins.model.BuildDiscarderProperty>
-      <strategy class="hudson.tasks.LogRotator">
-        <daysToKeep>5</daysToKeep>
-        <numToKeep>5</numToKeep>
-        <artifactDaysToKeep>5</artifactDaysToKeep>
-        <artifactNumToKeep>5</artifactNumToKeep>
-      </strategy>
-    </jenkins.model.BuildDiscarderProperty>
+    <hudson.model.ParametersDefinitionProperty>
+      <parameterDefinitions>
+        <hudson.model.StringParameterDefinition>
+          <name>TAG</name>
+          <description>Please choose version for tomcat docker image creation; default value is v1</description>
+          <defaultValue>v1</defaultValue>
+        </hudson.model.StringParameterDefinition>
+      </parameterDefinitions>
+    </hudson.model.ParametersDefinitionProperty>
     <org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
       <triggers/>
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
