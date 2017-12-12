@@ -17,7 +17,7 @@
         <hudson.model.StringParameterDefinition>
           <name>TOMCAT_PORT</name>
           <description>Define tomcat port you want to run application.</description>
-          <defaultValue>8888</defaultValue>
+          <defaultValue>8880</defaultValue>
         </hudson.model.StringParameterDefinition>
         <hudson.model.StringParameterDefinition>
           <name>APP_VERSION</name>
