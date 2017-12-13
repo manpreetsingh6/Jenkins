@@ -17,7 +17,15 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.41">
-    <script>build &apos;Demo&apos;</script>
+    <script>
+
+stage(&apos;Build&apos;) {
+  build &apos;Demo&apos;
+}
+stage(&apos;Test&apos;) {
+  build &apos;Demo-Trigger&apos;
+}
+</script>
     <sandbox>true</sandbox>
   </definition>
   <triggers/>
