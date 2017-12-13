@@ -17,12 +17,24 @@
     </org.jenkinsci.plugins.workflow.job.properties.PipelineTriggersJobProperty>
   </properties>
   <definition class="org.jenkinsci.plugins.workflow.cps.CpsFlowDefinition" plugin="workflow-cps@2.41">
-    <script>stage(&apos;Build&apos;) {
-  build &apos;Demo&apos;
+    <script>stage &quot;Build&quot;
+if (theStage in [&quot;Build&quot;]) {
+    sleep 2
 }
-stage(&apos;Test&apos;) {
-  build &apos;Demo-Trigger&apos;
+stage(&quot;Checkpoint&quot;) {
+      agent none
+      steps {
+        checkpoint &apos;Completed Build&apos;
+      }
+stage &quot;Test&quot;
+if (theStage in [&quot;Build&quot;, &quot;Test&quot;]) {
+    sleep 2
 }
+stage(&quot;Checkpoint&quot;) {
+      agent none
+      steps {
+        checkpoint &apos;Completed Test&apos;
+      }
 </script>
     <sandbox>true</sandbox>
   </definition>
