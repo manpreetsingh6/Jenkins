@@ -25,7 +25,8 @@ stage(&quot;Checkpoint&quot;) {
       agent none
       steps {
         checkpoint &apos;Completed Build&apos;
-      }
+      } 
+}
 stage &quot;Test&quot;
 if (theStage in [&quot;Build&quot;, &quot;Test&quot;]) {
     sleep 2
