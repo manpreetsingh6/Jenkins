@@ -35,6 +35,7 @@ stage(&quot;Checkpoint&quot;) {
       steps {
         checkpoint &apos;Completed Test&apos;
       }
+}
 </script>
     <sandbox>true</sandbox>
   </definition>
