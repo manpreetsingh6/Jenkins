@@ -20,9 +20,8 @@
     <script>stage(&apos;Build&apos;) {
   build &apos;Demo&apos;
 }
-checkpoint &quot;Build Done&quot;
 stage(&apos;Test&apos;) {
-  build &apos;Demo-Trigger&apos;
+  build &apos;Demo-Pipeline&apos;
 }
 </script>
     <sandbox>true</sandbox>
